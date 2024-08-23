@@ -1,6 +1,10 @@
 import { useState } from "react";
 import auth from "../firebase/firebase.config";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  updateProfile,
+} from "firebase/auth";
 import { FaRegEye } from "react-icons/fa6";
 import { FaRegEyeSlash } from "react-icons/fa6";
 import { Link } from "react-router-dom";
@@ -12,10 +16,20 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const name = e.target.name.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
     const accepted = e.target.terms.checked;
-    console.log("Email:", email, "Password:", password, "Checked:", accepted);
+    console.log(
+      "Name",
+      name,
+      "Email:",
+      email,
+      "Password:",
+      password,
+      "Checked:",
+      accepted
+    );
     //clear error
     setRegisterError("");
     setRegistrationSuccess("");
@@ -38,6 +52,22 @@ const Register = () => {
       .then((result) => {
         console.log(result);
         setRegistrationSuccess("User Created Successfully");
+
+        //update profile
+        updateProfile(result.user, {
+          displayName: name,
+          photoURL: result.user.photoURL,
+        })
+          .then(() => {
+            console.log("Profile Updated");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        //send verification email:
+        sendEmailVerification(result.user).then(() => {
+          alert("Please check your email and verify your account!");
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -48,6 +78,15 @@ const Register = () => {
     <div className="text-center">
       <h2 className="text-3xl text-center">Please Register</h2>
       <form onSubmit={handleSubmit} className=" ">
+        <input
+          className="border-2 mt-4 px-4 py-2 w-3/4"
+          type="name"
+          name="name"
+          id="name"
+          placeholder="Your Name"
+          required
+        />
+        <br />
         <input
           className="border-2 my-4 px-4 py-2 w-3/4"
           type="email"
@@ -94,7 +133,10 @@ const Register = () => {
         <p className="text-green-500 mt-5">{registrationSuccess}</p>
       )}
       <p className="my-3">
-        Already have an account? Please <Link className="text-blue-600" to="/login">Login</Link>
+        Already have an account? Please{" "}
+        <Link className="text-blue-600" to="/login">
+          Login
+        </Link>
       </p>
     </div>
   );
