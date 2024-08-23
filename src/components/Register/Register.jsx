@@ -1,22 +1,30 @@
 import { useState } from "react";
 import auth from "../firebase/firebase.config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { FaRegEye } from "react-icons/fa6";
+import { FaRegEyeSlash } from "react-icons/fa6";
 
 const Register = () => {
   const [registerError, setRegisterError] = useState("");
   const [registrationSuccess, setRegistrationSuccess] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
-    console.log(email, password);
+    console.log("Email:", email, "Password:", password);
     //clear error
     setRegisterError("");
     setRegistrationSuccess("");
     // password validation
     if (password.length < 6) {
       setRegisterError("Password should be at least 6 characters or longer");
+      return;
+    } else if (!/[A-Z]/.test(password)) {
+      setRegisterError(
+        "Your password should have at least one upper case characters."
+      );
       return;
     }
 
@@ -44,14 +52,26 @@ const Register = () => {
           required
         />
         <br />
-        <input
-          className="border-2 mb-4 px-4 py-2 w-3/4"
-          type="password"
-          name="password"
-          id="password"
-          placeholder="Password"
-          required
-        />
+        <div className="flex items-center justify-center">
+          <input
+            className="border-2  px-4 py-2 w-3/4"
+            type={showPassword ? "text" : "password"}
+            name="password"
+            id="password"
+            placeholder="Password"
+            required
+          />
+          <span
+            className="absolute right-64 top-48"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? (
+              <FaRegEye> </FaRegEye>
+            ) : (
+              <FaRegEyeSlash></FaRegEyeSlash>
+            )}
+          </span>
+        </div>
         <br />
         <input
           type="submit"
