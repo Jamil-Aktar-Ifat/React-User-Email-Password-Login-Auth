@@ -1,9 +1,20 @@
+import auth from "../firebase/firebase.config";
+import {createUserWithEmailAndPassword } from "firebase/auth";
+
 const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
     console.log(email, password);
+    // create user
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   return (
     <div className="text-center">
