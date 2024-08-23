@@ -13,7 +13,8 @@ const Register = () => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
-    console.log("Email:", email, "Password:", password);
+    const accepted = e.target.terms.checked;
+    console.log("Email:", email, "Password:", password, "Checked:", accepted);
     //clear error
     setRegisterError("");
     setRegistrationSuccess("");
@@ -26,6 +27,9 @@ const Register = () => {
         "Your password should have at least one upper case characters."
       );
       return;
+    } else if (!accepted) {
+      setRegisterError("Please accept our terms and conditions");
+      return; 
     }
 
     // create user
@@ -52,7 +56,7 @@ const Register = () => {
           required
         />
         <br />
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center relative">
           <input
             className="border-2  px-4 py-2 w-3/4"
             type={showPassword ? "text" : "password"}
@@ -62,7 +66,7 @@ const Register = () => {
             required
           />
           <span
-            className="absolute right-64 top-48"
+            className="absolute right-20  md:right-40"
             onClick={() => setShowPassword(!showPassword)}
           >
             {showPassword ? (
@@ -72,6 +76,11 @@ const Register = () => {
             )}
           </span>
         </div>
+        <br />
+        <input className="mb-3" type="checkbox" name="terms" id="terms" />
+        <label className="ml-2 mb-4" htmlFor="terms">
+          Accept our <a href="http://">Terms and Conditions </a>
+        </label>
         <br />
         <input
           type="submit"
