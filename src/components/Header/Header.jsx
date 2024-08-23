@@ -4,6 +4,9 @@ const Header = () => {
   const navLinks = (
     <>
       <li>
+        <NavLink to="/">Home</NavLink>
+      </li>
+      <li>
         <NavLink to="/login">Login</NavLink>
       </li>
       <li>
@@ -47,7 +50,7 @@ const Header = () => {
         <ul className="menu menu-horizontal px-1 gap-5">{navLinks}</ul>
       </div>
       <div className="navbar-end">
-        <a className="btn">Button</a>
+        <a className="btn">Click_Me</a>
       </div>
     </div>
   );
