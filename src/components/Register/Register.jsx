@@ -3,6 +3,7 @@ import auth from "../firebase/firebase.config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { FaRegEye } from "react-icons/fa6";
 import { FaRegEyeSlash } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 
 const Register = () => {
   const [registerError, setRegisterError] = useState("");
@@ -29,7 +30,7 @@ const Register = () => {
       return;
     } else if (!accepted) {
       setRegisterError("Please accept our terms and conditions");
-      return; 
+      return;
     }
 
     // create user
@@ -92,6 +93,9 @@ const Register = () => {
       {registrationSuccess && (
         <p className="text-green-500 mt-5">{registrationSuccess}</p>
       )}
+      <p className="my-3">
+        Already have an account? Please <Link className="text-blue-600" to="/login">Login</Link>
+      </p>
     </div>
   );
 };
